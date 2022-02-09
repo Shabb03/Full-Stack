@@ -7,6 +7,6 @@ from .models import *
 # Register your models here.
 admin.site.register(APIUser)
 admin.site.register(Product)
-admin.site.register(Basket)
-admin.site.register(BasketItems)
+admin.site.register(Cart)
+admin.site.register(CartItems)
 admin.site.register(Order)

@@ -1,0 +1,32 @@
+{%  extends 'base.html' %}
+
+{% block title %}Order Now{%  endblock %}
+
+{%  block content %}
+   
+{% if empty %}
+    <p>Your Cart is Empty</p>
+{% else %}
+    <table>
+        <tbody>
+            <!--<tr><td>name</td><td>description</td><td>image</td><td>quantity</td><td>price</td></tr>-->
+            {% for item in show_items %}
+            <tr>
+                <td> {{item.product_id.name}}__ </td>
+                <td> __{{item.product_id.description}}____ </td>
+                <td><img src="{{item.product_id.product_image.url}}", style="width:200px;height:200px;"/></td>
+                <td> ____{{item.quantity}}__ </td>
+                <td> __{{item.item_price}}__ </td>
+                <td><a href="/removeitem/{{item.id}}" class="btn btn-primary">Remove Item</a></td></tr>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endif %}
+<form method="POST", action=".">
+    {% csrf_token %} 
+    {{ form.as_table }}
+    <button type="submit">Order</button>
+</form>
+
+{%  endblock %}

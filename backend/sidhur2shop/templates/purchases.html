@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Order history{% endblock %}
+
+{% block content %}
+<table>
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Time</th> 
+            <th>Shipping Address</th>
+            <th>Total price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+            <tr>
+                <td>{{ o.id }}</td>
+                <td>{{ o.date_ordered }}</td>
+                <td>{{ o.address  }}</td>
+                <td>{{ o.total_price }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

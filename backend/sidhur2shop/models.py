@@ -30,15 +30,15 @@ class Product(models.Model):
         default=MOBILE,
     )
 
-class Basket(models.Model):
+class Cart(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(APIUser, on_delete=models.CASCADE)
     is_active = models.BooleanField(default=True)
     time = models.DateTimeField(auto_now=True)
 
-class BasketItems(models.Model):
+class CartItems(models.Model):
     id = models.AutoField(primary_key=True)
-    basket_id = models.ForeignKey(Basket, on_delete=models.CASCADE)
+    cart_id = models.ForeignKey(Cart, on_delete=models.CASCADE)
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     time = models.DateTimeField(auto_now=True)
@@ -49,10 +49,10 @@ class BasketItems(models.Model):
 class Order(models.Model):
     id = models.AutoField(primary_key=True)
     date_ordered = models.DateTimeField(auto_now=True)
-    basket_id = models.ForeignKey(Basket, on_delete=models.CASCADE)
+    cart_id = models.ForeignKey(Cart, on_delete=models.CASCADE)
     user_id = models.ForeignKey(APIUser, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
-    address = models.CharField(max_length=100, null=True)
+    address = models.TextField(default="")
     instructions = models.CharField(max_length=200, null=True)
     FAILED = 'FL'
     PROCESSING = 'PR'

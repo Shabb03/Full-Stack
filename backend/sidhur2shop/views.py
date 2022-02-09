@@ -12,17 +12,17 @@ from django.contrib.auth.decorators import login_required
 
 products = Product.objects.all()
 
-def index(request):
-    return render(request, 'index.html', {'products':products})
+def home(request):
+    return render(request, 'home.html', {'products':products})
 
-def product_individual(request, prodid):
+def product(request, prodid):
     product = Product.objects.get(id=prodid)
-    return render(request, 'product_individual.html', {'product':product})
+    return render(request, 'product.html', {'product':product})
 
 class UserSignupView(CreateView):
     model = APIUser
     form_class = UserSignupForm
-    template_name = 'user_signup.html'
+    template_name = 'register.html'
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(**kwargs)
@@ -41,31 +41,79 @@ def logout_user(request):
     return redirect("/")
 
 @login_required
-def add_to_basket(request, prodid):
+def add_item(request, prodid):
     user = request.user
-    basket = Basket.objects.filter(user_id=user, is_active=True).first()
-    if basket is None:
-        Basket.objects.create(user_id = user)
-        basket = Basket.objects.filter(user_id=user, is_active=True).first()
+    cart = Cart.objects.filter(user_id=user, is_active=True).first()
+    if cart is None:
+        Cart.objects.create(user_id = user)
+        cart = Cart.objects.filter(user_id=user, is_active=True).first()
     product = Product.objects.get(id=prodid)
-    sbi = BasketItems.objects.filter(basket_id=basket, product_id = product).first()
-    if sbi is None:
-        sbi = BasketItems(basket_id=basket, product_id = product)
-        sbi.save()
+    show_items = CartItems.objects.filter(cart_id=cart, product_id = product).first()
+    if show_items is None:
+        show_items = CartItems(cart_id=cart, product_id = product)
+        show_items.save()
     else:
-        sbi.quantity = sbi.quantity+1
-        sbi.save()
-    return render(request, 'product_individual.html', {'product': product, 'added':True})
+        show_items.quantity = show_items.quantity+1
+        show_items.save()
+    return render(request, 'product.html', {'product': product, 'added':True})
 
 @login_required
-def show_basket(request):
+def display_cart(request):
     user = request.user
-    basket = Basket.objects.filter(user_id=user, is_active=True).first()
-    if basket is None:
-        return render(request, 'basket.html', {'empty':True})
+    cart = Cart.objects.filter(user_id=user, is_active=True).first()
+    if cart is None:
+        return render(request, 'cart.html', {'empty':True})
     else:
-        show_items = BasketItems.objects.filter(basket_id=basket)
+        show_items = CartItems.objects.filter(cart_id=cart)
         if show_items.exists():
-            return render(request, 'basket.html', {'basket':basket, 'show_items':show_items})
+            return render(request, 'cart.html', {'cart':cart, 'show_items':show_items})
         else:
-            return render(request, 'basket.html', {'empty':True})
+            return render(request, 'cart.html', {'empty':True})
+
+@login_required
+def remove(request, show_items):
+    cartitem = CartItems.objects.get(id=show_items)
+    if cartitem is None:
+        return redirect('/cart')
+    else:
+        if cartitem.quantity > 1:
+            cartitem.quantity = cartitem.quantity - 1
+            cartitem.save()
+        else:
+            cartitem.delete()
+    return redirect('/cart')
+
+@login_required
+def order(request):
+    user = request.user
+    cart = Cart.objects.filter(user_id=user, is_active=True).first()
+    if cart is None:
+        return redirect('/')
+    show_items = CartItems.objects.filter(cart_id=cart)
+    if not show_items.exists():
+        return redirect('/')
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            order.user_id = user
+            order.cart_id = cart
+            total = 0.0
+            for item in show_items:
+                total += float(item.item_price())
+            order.total_price = total
+            order.save()
+            cart.is_active = False
+            cart.save()
+            return render(request, 'fulfilled.html', {'order':order, 'cart':cart, 'show_items':show_items})
+        else:
+            return render(request, 'orders.html', {'form':form, 'cart':cart, 'show_items':show_items})
+    else:
+        form = OrderForm()
+        return render(request, 'orders.html', {'form':form, 'cart':cart, 'show_items':show_items})
+
+@login_required
+def purchases(request):
+    user = request.user
+    orders = Order.objects.filter(user_id=user)
+    return render(request, 'purchases.html', {'orders':orders})
