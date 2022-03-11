@@ -2,15 +2,39 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from rest_framework import viewsets
+from rest_framework import generics
 from django.shortcuts import redirect
 from .models import *
 from django.views.generic import CreateView
 from django.contrib.auth import login, logout
 from .forms import *
+from .serializers import *
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny
 
 products = Product.objects.all()
+
+class UserRegistrationAPIView(generics.CreateAPIView):
+    serializer_class = RegisterSerializer
+    permission_classes = [AllowAny]
+    queryset = APIUser.objects.all()
+
+class AddItemAPIView(generics.CreateAPIView):
+    serializer_class = AddItemSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = CartItems.objects.all()
+
+class RemoveItemAPIView(generics.CreateAPIView):
+    serializer_class = RemoveItemSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = CartItems.objects.all()
+
+class CheckoutAPIView(generics.CreateAPIView):
+    serializer_class = CheckoutSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
 
 def home(request):
     return render(request, 'home.html', {'products':products})
@@ -117,3 +141,39 @@ def purchases(request):
     user = request.user
     orders = Order.objects.filter(user_id=user)
     return render(request, 'purchases.html', {'orders':orders})
+
+class ProductViewSet(viewsets.ModelViewSet):
+	queryset = Product.objects.all()
+	serializer_class = ProductSerializer
+
+class CartViewSet(viewsets.ModelViewSet):
+    serializer_class = CartSerializer
+    queryset = Cart.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Cart.objects.all()
+        else:
+            shopping_cart = Cart.objects.filter(user_id=user, is_active=True)
+            return shopping_cart
+
+class OrderViewSet(viewsets.ModelViewSet):
+    serializer_class = OrderSerializer
+    queryset = Order.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_superuser:
+            return Order.objects.all()
+        else:
+            orders = Order.objects.filter(user_id=user)
+            return orders
+
+class APIUserViewSet(viewsets.ModelViewSet):
+    queryset = APIUser.objects.all()
+    serializer_class = APIUserSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
