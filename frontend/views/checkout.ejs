@@ -1,0 +1,147 @@
+<%- include('header') -%>
+
+<div class="header">
+  <div class="inner-header flex">
+      <h1 class="is-size-1">Checkout</h1>
+  </div>
+</div>
+
+<form id="ship_address" class="box has-background-grey-lighter">
+    <div class="field">
+      <label class="label" for="address">Address:</label>
+      <div class="control">
+        <input class="input" type="text" name="address" id="shipping_address" placeholder="Your Address" required>
+      </div>
+    </div>
+    <button class="button is-primary is-rounded" type="submit">Order</button>
+</form>
+
+<table class="table is-hoverable is-fullwidth has-background-grey-lighter">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody id="cartview">
+      
+    </tbody>
+    <tbody>
+      <tr>
+        <th>Total Price: </th>
+        <td id="totalprice">€0</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div>
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+      </g>
+    </svg>
+  </div> 
+
+  <script>
+    let total = 0;
+
+    function displayCart(products) {
+        let quantity = products['quantity'];
+        let totalprice = products['item_price'];
+        let prodid = products['product_id'];
+        total += totalprice;
+        fetch(prodid)
+        .then(resp => resp.json())
+        .then(data => {
+            let id = data['id'];
+            let name = data['name'];
+            let desc = data['description'];
+            let price = data['price'];
+            let image = data['product_image'];
+
+            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
+            let prod = document.getElementById("cartview");
+            prod.innerHTML += htmlString;
+        })
+        let total_price = document.getElementById("totalprice");
+        total_price.innerHTML = "€"+total;
+    }
+
+    function buildCart(){
+        token = localStorage.getItem("access")
+        if(token == null) {
+            window.location = "/login";
+        }
+        fetch("http://127.0.0.1:8000/api/cart/", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+localStorage.getItem("access")
+        }
+        })
+        .then(resp=>resp.json())
+        .then(data=>{
+            let cart = data[0];
+            let id = cart['id'];
+            let items = cart['items'];
+            items.forEach(element => {
+                displayCart(element);
+            });
+        })
+    }
+
+    buildCart();
+
+    function formValidator(event){
+        event.preventDefault();
+        let address = document.getElementById("shipping_address").value; 
+        console.log("here1");
+        if( address == ""){
+            alert("Address cannot be null");
+        }
+        else{
+            console.log("here2");
+            fetch("http://127.0.0.1:8000/api/cart/", {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+localStorage.getItem("access")
+                }
+            })
+            .then(resp=>resp.json())
+            .then(data=>{
+                let cart = data[0];
+                let id = cart['id'];
+
+                fetch("http://127.0.0.1:8000/apicheckout/", {
+                    method: 'POST',
+                    headers: {
+		                'Accept': 'application/json',
+		                'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+localStorage.getItem("access")
+                    },
+                    body: JSON.stringify({cart_id: id, address: address})
+                })
+            });
+            window.location = "/order";
+        }
+    }
+
+    let myform = document.getElementById("ship_address");
+    myform.addEventListener('submit', formValidator);
+  </script>
+
+<%- include('footer') -%>

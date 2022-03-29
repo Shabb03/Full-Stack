@@ -1,0 +1,47 @@
+  <footer class="footer has-background-dark">
+    <div class="content has-text-centered">
+      <p class="has-text-light">
+        <strong class="has-text-light">Sidhur2's Electronic Shop</strong> by <a class="hover" href="https://richard-luc.github.io/shabatomic.github.io/">Rishabdev Sidhu</a>. I acknowlege DCU's plagiarism and declare this is solely my work with the help of Michael Scriney and
+        <a class="hover" href="https://bulma.io/">Bulma</a> CSS Framework.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+	  window.userLoggedIn = false;
+
+	  function isLoggedIn(){
+		  let accessToken = localStorage.getItem("access");
+      if((accessToken != null) && (typeof(accessToken)!='undefined') && (accessToken != "undefined")){
+        window.userLoggedIn = true;
+      }
+		  if(window.userLoggedIn){
+          let loginLink = document.getElementById("auth-link");
+          loginLink.innerHTML = "Logout";
+          loginLink.href = "/";
+          let register = document.getElementById("signup");
+          register.remove();
+			}
+      else{
+        let cart = document.getElementById("navcart");
+        let order = document.getElementById("navorder");
+        cart.remove();
+        order.remove();
+      }
+	  }
+
+    window.onload = function(){
+	    isLoggedIn(); // when the page loads call isLoggedIn
+    }
+
+    let logout = document.getElementById("auth-link");
+    logout.onclick = function() {
+      localStorage.setItem("access","undefined");
+      localStorage.setItem("refresh","");
+      window.userLoggedIn = false;
+    }
+
+</script>
+
+</body>
+</html>

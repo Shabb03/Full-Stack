@@ -1,0 +1,53 @@
+<%- include('header') -%>
+
+    <div id="container" class="shopcontainer">
+        <div id="prods" class="columns">
+
+        </div>
+    </div>
+
+    <div>
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+          viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+          <defs>
+            <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+          </defs>
+          <g class="parallax">
+            <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+            <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+            <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+            <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+          </g>
+        </svg>
+    </div>
+    
+    <script>
+    let i = 0;
+    let j = 0;
+    let req = "http://127.0.0.1:8000/api/products/"
+        fetch(req)
+		    .then(response => response.json())
+		    //.then(data => console.log(data));
+            .then(data => data.forEach(element => {
+                console.log(element);
+                let name = element['name'];
+                let image = element.product_image;
+                let id = element.id;
+
+                if (i > 2) {
+                    let mainprod = document.getElementById("container");
+                    mainprod.innerHTML += "<div class=\"columns\"></div>";
+                    i = 0;
+                    j++;
+                }
+                console.log(id);
+
+                //let htmlString = "<div class=\"column\"><img src="+image+" height=\"250\" width=\"250\"><p><a class=\"home_item\" href=\"/productindividual?id="+id+"\" target=\"_blank\">"+name+"</a></p></div>";
+                let htmlString = "<div class=\"column\"><a href=\"/productindividual?id="+id+"\" target=\"_blank\"><img src=\""+image+"\" height=\"250\" width=\"250\"><p class=\"home_item\">"+name+"</p></a>";
+                let prod = document.getElementsByClassName("columns");
+                prod[j].innerHTML += htmlString;
+                i++;
+            }))
+    </script>
+
+<%- include('footer') -%>

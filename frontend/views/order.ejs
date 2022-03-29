@@ -1,0 +1,74 @@
+<%- include('header') -%>
+  <div class="header">
+    <div class="inner-header flex">
+      <h1 class="is-size-1">Order History</h1>
+    </div>
+  </div>
+
+  <table class="table is-striped is-hoverable is-fullwidth">
+    <thead>
+      <tr>
+        <th>Date Ordered</th>
+        <th>Time Ordered</th>
+        <th>Shipping Address</th>
+        <th>Total Price</th>
+      </tr>
+    </thead>
+    <tbody id="orderview">
+      
+    </tbody>
+  </table>
+
+  <div>
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+      <defs>
+        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+      </defs>
+      <g class="parallax">
+        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+      </g>
+    </svg>
+  </div> 
+
+  <script>
+    function displayOrder(history) {
+        let address = history['address'];
+        let datetime = history['date_ordered'];
+        let price = history['total_price'];
+
+        let date = datetime.substring(0,10);
+        let time = datetime.substring(11,16);
+           
+        let htmlString = "<tr><td>"+date+"</td><td>"+time+"</td><td>"+address+"</td><td>"+price+"</td>";
+        let table = document.getElementById("orderview");
+        table.innerHTML += htmlString;
+    }
+
+    function Orders(){
+        let token = localStorage.getItem("access");
+        if(token == null) {
+            window.location = "/login";
+        }
+        fetch("http://127.0.0.1:8000/api/orders/", {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer '+localStorage.getItem("access")
+        }
+        })
+        .then(resp=>resp.json())
+        .then(data=>{
+            data.forEach(element => {
+                //console.log(element);
+                displayOrder(element);
+            });
+        })
+    }
+    Orders();
+  </script>
+<%- include('footer') -%>
