@@ -63,8 +63,6 @@ class AddItemSerializer(serializers.ModelSerializer):
             else:
                 new_cart_item = CartItems.objects.create(cart_id=shopping_cart, product_id=product_id, quantity=1)
                 return new_cart_item
-
-                #return CartItems(cart_id=shopping_cart, product_id=product_id, quantity=0)
             
         else:
             return None
@@ -91,8 +89,6 @@ class RemoveItemSerializer(serializers.ModelSerializer):
                     return CartItems(cart_id=shopping_cart, product_id=product_id, quantity=0)
             else:
                 return CartItems(cart_id=shopping_cart, product_id=product_id, quantity=0)
-                #new_cart_item = CartItems.objects.create(cart_id=shopping_cart, product_id=product_id, quantity=0)
-                #return new_cart_item
         else:
             return None 
 

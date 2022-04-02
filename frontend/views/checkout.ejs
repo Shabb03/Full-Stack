@@ -6,18 +6,18 @@
   </div>
 </div>
 
-<form id="ship_address" class="box has-background-grey-lighter">
+<form id="ship_address" class="box formcol">
     <div class="field">
       <label class="label" for="address">Address:</label>
       <div class="control">
         <input class="input" type="text" name="address" id="shipping_address" placeholder="Your Address" required>
       </div>
     </div>
-    <button class="button is-primary is-rounded" type="submit">Order</button>
+    <button class="button is-info is-rounded" type="submit">Order Now!</button>
 </form>
 
 <table class="table is-hoverable is-fullwidth has-background-grey-lighter">
-    <thead>
+    <thead id="tablehead">
       <tr>
         <th>Product</th>
         <th>Name</th>
@@ -38,20 +38,7 @@
     </tbody>
   </table>
 
-  <div>
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-      viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-      <defs>
-        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-      </defs>
-      <g class="parallax">
-        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-      </g>
-    </svg>
-  </div> 
+  <a href="/checkout" class="button is-primary">Back to Cart</a>
 
   <script>
     let total = 0;
@@ -70,12 +57,12 @@
             let price = data['price'];
             let image = data['product_image'];
 
-            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
+            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td>"+name+"</td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>€"+totalprice+"</td>";
             let prod = document.getElementById("cartview");
             prod.innerHTML += htmlString;
         })
         let total_price = document.getElementById("totalprice");
-        total_price.innerHTML = "€"+total;
+        total_price.innerHTML = "€"+total.toFixed(2);
     }
 
     function buildCart(){

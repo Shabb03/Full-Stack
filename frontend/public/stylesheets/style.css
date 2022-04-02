@@ -1,5 +1,5 @@
 .hover:hover {
-  color: lime;
+  color: #00ff00;
 }
 
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css";
@@ -7,7 +7,8 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background: linear-gradient(60deg, rgba(84,58,183,1) 0%, green 100%);
+  /*background: linear-gradient(60deg, rgba(84,58,183,1) 0%, green 100%);*/
+  background: linear-gradient(60deg, black 0%, red 100%);
 }
 
 a {
@@ -26,7 +27,6 @@ h1 {
 .header {
   position:relative;
   text-align:center;
-  background: linear-gradient(60deg, rgba(84,58,183,1) 0%, green 100%);
   color: white;
 }
 
@@ -84,17 +84,17 @@ h1 {
 }
 
 .navbar{
-  background: linear-gradient(60deg, rgba(84,58,183,1) 0%, green 100%);
+  background-color: black !important;
 }
 
 .navbar-item {
-  color: white !important;
+  color: red !important;
 }
 
 .navbar_item:hover {
-  background: white;    
-  box-shadow: 0 0 20px 10px white; 
-  color: lime !important;
+  background: red !important;  
+  box-shadow: 0 0 20px 10px red; 
+  color: black !important;
   border-radius: 10px;
 }
 
@@ -118,4 +118,41 @@ h1 {
   margin: 50px;
 }
 
-/*rgba(0,172,193,1)*/
+.is-primary {
+  background-color: rgb(150, 0, 0) !important;
+}
+
+.is-primary:hover {
+  background-color: rgb(200, 0, 0) !important;
+  box-shadow: 0 0 20px 10px rgb(200, 0, 0) !important; 
+}
+
+.is-link {
+  color: white !important;
+  background-color: red !important;
+}
+
+.is-link:hover {
+  background-color: #00ff00 !important;
+  box-shadow: 0 0 20px 10px #00ff00 !important; 
+  color: black !important;
+}
+
+.is-info {
+  color: white !important;
+  background-color: red !important;
+}
+
+.is-info:hover {
+  background-color: white !important;
+  box-shadow: 0 0 20px 10px white !important; 
+  color: black !important;
+}
+
+#tablehead {
+  background-color: #00ff00;
+}
+
+.formcol {
+  background-color: #00ff00 !important;
+}

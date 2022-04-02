@@ -7,7 +7,7 @@
   </div>
 
   <table class="table is-hoverable is-fullwidth has-background-grey-lighter">
-    <thead>
+    <thead id="tablehead">
       <tr>
         <th>Product</th>
         <th>Name</th>
@@ -15,6 +15,7 @@
         <th>Price</th>
         <th>Quantity</th>
         <th>Total Price</th>
+        <th>Remove</th>
       </tr>
     </thead>
     <tbody id="cartview">
@@ -22,24 +23,30 @@
     </tbody>
   </table>
 
-  <div>
-    <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-      viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-      <defs>
-        <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-      </defs>
-      <g class="parallax">
-        <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-        <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-        <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-        <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-      </g>
-    </svg>
-  </div> 
-
-  <a href="/checkout" class="button is-link is-medium is-fullwidth">Checkout</a>
+  <a href="/checkout" class="button is-primary is-medium is-fullwidth">Checkout</a>
 
   <script>
+    /*function removeProd(i) {
+      console.log(i);
+    }*/
+
+    function removeProd(i) {
+      fetch('http://127.0.0.1:8000/apiremove/', {
+          'method':'POST',
+          'headers':{
+              "Accept": "application/json",
+              "Content-Type": "application/json",
+              "Authorization": 'Bearer '+localStorage.getItem("access")
+          },
+          'body': JSON.stringify({product_id:i})
+      })
+      .then(resp=>resp.json())
+      .then(data=>{
+        console.log("item removed from basket")
+      })
+      window.location.reload();
+    }
+
     function displayCart(products) {
         let quantity = products['quantity'];
         let totalprice = products['item_price'];
@@ -53,17 +60,19 @@
             let price = data['price'];
             let image = data['product_image'];
 
-            let remove = document.createElement("button");
-            remove.innerHTML = "Remove";
-            remove.className = "button is-link"; 
+            //let remove = document.createElement("button");
+            //remove.innerHTML = "Remove";
+            //remove.className = "button is-link"; 
 
             //let htmlString = "<tr class=\"row\"><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
-            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
+            //let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
+            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>€"+totalprice+"</td><td><button class=\"button is-link\" onclick=\"removeProd("+id+")\">Remove</button></td>";
+            console.log(htmlString);
             let prod = document.getElementById("cartview");
             prod.innerHTML += htmlString;
-            prod.appendChild(remove);
+            //prod.appendChild(remove);
 
-            remove.onclick = function(){
+            /*remove.onclick = function(){
                 fetch('http://127.0.0.1:8000/apiremove/', {
                     'method':'POST',
                     'headers':{
@@ -81,7 +90,7 @@
                 //tablerow[tablerow.length - 1].remove();
                 //remove.remove();
                 window.location.reload();
-            }
+            }*/
         })
     }
 

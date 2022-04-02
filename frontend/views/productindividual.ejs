@@ -27,21 +27,6 @@
           </div>
         </div>
     </div>
-    
-    <div>
-      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-        viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-        <defs>
-          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-        </defs>
-        <g class="parallax">
-          <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-          <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-        </g>
-      </svg>
-    </div> 
 
     <script>
         function showProduct(){
@@ -70,43 +55,35 @@
 
                 let addToCart = document.createElement("button");
                 addToCart.innerHTML = "Add to Cart";
-                addToCart.className = "button is-link"; 
+                addToCart.className = "button is-primary"; 
                 let buttonDiv = document.getElementsByClassName("buttons");
                 buttonDiv[1].appendChild(addToCart);
 
                 addToCart.onclick = ()=>{
                   let token = localStorage.getItem("access");
-                  if(token == null) {
+                  if(token == null || token == "undefined") {
                     window.location = "/login";
                   }
-	                fetch('http://127.0.0.1:8000/apiadd/', {
-		                method: 'POST',
-		                headers: {
-			                'Accept': 'application/json',
-			                'Content-Type': 'application/json',
-			                'Authorization': 'Bearer '+localStorage.getItem("access")
-		                },
-		                body: JSON.stringify({
-			                "product_id": parseInt(productID)
-		                })
-	                })
-	                .then(response=>response.json())
-	                .then(data=>{
+                  else {
+	                  fetch('http://127.0.0.1:8000/apiadd/', {
+		                  method: 'POST',
+		                  headers: {
+			                  'Accept': 'application/json',
+			                  'Content-Type': 'application/json',
+			                  'Authorization': 'Bearer '+localStorage.getItem("access")
+		                  },
+		                  body: JSON.stringify({
+			                  "product_id": parseInt(productID)
+		                  })
+	                  })
+	                  .then(response=>response.json())
+	                  .then(data=>{
 
-			            console.log(data);
-                  let btn = document.getElementsByClassName("is-link");
-                  btn[0].innerHTML = "Added to Cart!";
-
-                  /*let back = document.createElement("button");
-                  back.innerHTML = "Added\nShop for More!";
-                  back.className = "button is-link"; 
-                  let buttonDiv2 = document.getElementsByClassName("buttons");
-                  buttonDiv2[1].appendChild(back);
-
-                  back.onclick = ()=>{
-                    window.location = "/home";
-                  }*/
-		              });
+			              console.log(data);
+                    let btn = document.getElementsByClassName("is-link");
+                    btn[0].innerHTML = "Added to Cart!";
+		                });
+                  }
                 }
               }
             });

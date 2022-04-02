@@ -12,22 +12,20 @@ class Product(models.Model):
     description = models.CharField(max_length=500, null = False)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0.0)
     product_image = models.FileField(upload_to='media', default='settings.MEDIA_ROOT/media/random.jpg')
-    MOBILE = 'Mob'
-    COMPUTER = 'Com'
-    TV = 'Tv'
-    CONSOLE = 'Con'
-    TABLET = 'Tab'
+    ELECTRONIC = 'Elect'
+    EQUIPMENT = 'Equip'
+    MACHINE = 'Mach'
+    WORKOUT = 'Work'
     TAGS = [
-        (MOBILE, 'Mobile'),
-        (COMPUTER, 'Computer'),
-        (TV, 'Tv'),
-        (CONSOLE, 'Console'),
-        (TABLET, 'Tablet'),
+        (ELECTRONIC, 'Electronic'),
+        (EQUIPMENT, 'Equipment'),
+        (MACHINE, 'Machine'),
+        (WORKOUT, 'Workout'),
     ]
     tags = models.CharField(
         max_length=20,
         choices=TAGS,
-        default=MOBILE,
+        default=EQUIPMENT,
     )
 
 class Cart(models.Model):

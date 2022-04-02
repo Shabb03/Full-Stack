@@ -5,7 +5,7 @@
             </div>
         </div>
         
-        <form id="login_form" class="box has-background-grey-lighter">
+        <form id="login_form" class="box formcol">
             <div class="field"></div>
                 <label class="label" for="username-input">Username</label>
                 <div class="control">
@@ -18,60 +18,35 @@
                     <input class="input" type="password" id="password" name="password-input" placeholder="Your password" required>
                 </div>
             </div>
-            <button class="button is-primary is-rounded" type="submit">Login</button>
+            <button class="button is-info is-rounded" type="submit">Login</button>
         </form>
-
-        <div>
-            <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-              viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
-              <defs>
-                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
-              </defs>
-              <g class="parallax">
-                <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
-                <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
-                <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
-                <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
-              </g>
-            </svg>
-        </div> 
 
 		<script>
             function formValidator(event){
                 event.preventDefault();
                 let username = document.getElementById("username").value; 
                 let password = document.getElementById("password").value;
-                if( username == ""){
-                    alert("Username cannot be null");
-                }
-                else if (password == ""){
-                    alert("Password cannot be null");
-                }
-                else{
-                    fetch("http://127.0.0.1:8000/api/token/", {
-                    method: 'POST',
-                    headers: {
-		                'Accept': 'application/json',
-		                'Content-Type': 'application/json'
-                    },
-		            body: JSON.stringify({username: username, password: password})
-	                })
-                    .then(response=>response.json())
-                    .then(data=>{
-                        console.log(data);
-                        let accessToken = data['access'];
-                        let refreshToken = data['refresh'];
-                        localStorage.setItem("access", accessToken);
-                        localStorage.setItem("refresh", refreshToken);
-                        console.log(localStorage.getItem("access"));
-                        if('access' in data){
-                            window.location.href = "/order";
-                        }
-                        else{
-                            alert("username or password invalid");
-                        }
-                    });
-                }
+                fetch("http://127.0.0.1:8000/api/token/", {
+                method: 'POST',
+                headers: {
+		            'Accept': 'application/json',
+		            'Content-Type': 'application/json'
+                },
+		        body: JSON.stringify({username: username, password: password})
+	            })
+                .then(response=>response.json())
+                .then(data=>{
+                    let accessToken = data['access'];
+                    let refreshToken = data['refresh'];
+                    localStorage.setItem("access", accessToken);
+                    localStorage.setItem("refresh", refreshToken);
+                    if('access' in data){
+                        window.location.href = "/home";
+                    }
+                    else{
+                        alert("username or password invalid");
+                    }
+                });
             }
 
             let myform = document.getElementById("login_form");
