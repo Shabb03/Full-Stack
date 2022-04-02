@@ -1,13 +1,8 @@
-.hover:hover {
-  color: #00ff00;
-}
-
 @import "https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css";
 
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  /*background: linear-gradient(60deg, rgba(84,58,183,1) 0%, green 100%);*/
   background: linear-gradient(60deg, black 0%, red 100%);
 }
 
@@ -52,8 +47,6 @@ h1 {
   min-height:100px;
   max-height:150px;
 }
-
-/* Animation */
 
 .parallax > use {
   animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
@@ -111,7 +104,7 @@ h1 {
 }
 
 .home_item:hover {
-  color: lime;
+  color: black;
 }
 
 .tile {
@@ -133,9 +126,9 @@ h1 {
 }
 
 .is-link:hover {
-  background-color: #00ff00 !important;
-  box-shadow: 0 0 20px 10px #00ff00 !important; 
-  color: black !important;
+  background-color: black !important;
+  box-shadow: 0 0 20px 10px red !important; 
+  color: red !important;
 }
 
 .is-info {
@@ -150,9 +143,21 @@ h1 {
 }
 
 #tablehead {
-  background-color: #00ff00;
+  background-color: rgb(100, 0, 0) !important;
+}
+
+th {
+  color: white !important; 
 }
 
 .formcol {
-  background-color: #00ff00 !important;
+  background-color: rgb(100, 0, 0) !important;
+}
+
+.label {
+  color: white !important;
+}
+
+.hover:hover {
+  color: #00ff00 !important;
 }

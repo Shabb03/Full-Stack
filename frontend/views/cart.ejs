@@ -23,7 +23,7 @@
     </tbody>
   </table>
 
-  <a href="/checkout" class="button is-primary is-medium is-fullwidth">Checkout</a>
+  <a href="/checkout" class="button is-link is-medium">Checkout</a>
 
   <script>
     /*function removeProd(i) {
@@ -66,7 +66,7 @@
 
             //let htmlString = "<tr class=\"row\"><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
             //let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
-            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>€"+totalprice+"</td><td><button class=\"button is-link\" onclick=\"removeProd("+id+")\">Remove</button></td>";
+            let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>€"+totalprice+"</td><td><button class=\"button is-primary\" onclick=\"removeProd("+id+")\">Remove</button></td>";
             console.log(htmlString);
             let prod = document.getElementById("cartview");
             prod.innerHTML += htmlString;
