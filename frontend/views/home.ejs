@@ -12,9 +12,7 @@
     let req = "http://127.0.0.1:8000/api/products/"
         fetch(req)
 		    .then(response => response.json())
-		    //.then(data => console.log(data));
             .then(data => data.forEach(element => {
-                console.log(element);
                 let name = element['name'];
                 let image = element.product_image;
                 let id = element.id;
@@ -25,9 +23,7 @@
                     i = 0;
                     j++;
                 }
-                console.log(id);
 
-                //let htmlString = "<div class=\"column\"><img src="+image+" height=\"250\" width=\"250\"><p><a class=\"home_item\" href=\"/productindividual?id="+id+"\" target=\"_blank\">"+name+"</a></p></div>";
                 let htmlString = "<div class=\"column\"><a href=\"/productindividual?id="+id+"\" target=\"_blank\"><img src=\""+image+"\" height=\"250\" width=\"250\"><p class=\"home_item\">"+name+"</p></a>";
                 let prod = document.getElementsByClassName("columns");
                 prod[j].innerHTML += htmlString;

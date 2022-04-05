@@ -26,10 +26,6 @@
   <a href="/checkout" class="button is-link is-medium">Checkout</a>
 
   <script>
-    /*function removeProd(i) {
-      console.log(i);
-    }*/
-
     function removeProd(i) {
       fetch('http://127.0.0.1:8000/apiremove/', {
           'method':'POST',
@@ -60,37 +56,9 @@
             let price = data['price'];
             let image = data['product_image'];
 
-            //let remove = document.createElement("button");
-            //remove.innerHTML = "Remove";
-            //remove.className = "button is-link"; 
-
-            //let htmlString = "<tr class=\"row\"><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
-            //let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>"+totalprice+"</td><td id=\"prodbtn\"></td>";
             let htmlString = "<tr><td><img src=\""+image+"\" height=\"128\" width=\"128\"></td><td><a href=\""+prodid+"\">"+name+"</a></td><td>"+desc+"</td><td>€"+price+"</td><td>"+quantity+"</td><td>€"+totalprice+"</td><td><button class=\"button is-primary\" onclick=\"removeProd("+id+")\">Remove</button></td>";
-            console.log(htmlString);
             let prod = document.getElementById("cartview");
             prod.innerHTML += htmlString;
-            //prod.appendChild(remove);
-
-            /*remove.onclick = function(){
-                fetch('http://127.0.0.1:8000/apiremove/', {
-                    'method':'POST',
-                    'headers':{
-                        "Accept": "application/json",
-                        "Content-Type": "application/json",
-                        "Authorization": 'Bearer '+localStorage.getItem("access")
-                    },
-                    'body': JSON.stringify({product_id:id})
-                })
-                .then(resp=>resp.json())
-                .then(data=>{
-                    console.log("item removed from basket")
-                })
-                //let tablerow = document.getElementsByClassName("row");
-                //tablerow[tablerow.length - 1].remove();
-                //remove.remove();
-                window.location.reload();
-            }*/
         })
     }
 
